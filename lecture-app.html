@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Co to znaczy mieć umysł?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0a14;
+  --bg-card: #12121f;
+  --amber: #f4a261;
+  --amber-dim: #f4a26133;
+  --amber-glow: #f4a26155;
+  --teal: #2ec4b6;
+  --teal-dim: #2ec4b622;
+  --text-primary: #e8e6e1;
+  --text-secondary: #9a9689;
+  --text-muted: #5a5850;
+  --locked: #2a2a3a;
+  --danger: #e74c3c;
+  --violet: #a78bfa;
+  --violet-dim: #a78bfa22;
+  --rose: #fb7185;
+  --rose-dim: #fb718522;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+.screen { display: none; min-height: 100dvh; padding: 2rem 1.5rem; animation: fadeIn 0.6s ease-out; }
+.screen.active { display: flex; flex-direction: column; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 15px var(--amber-dim); } 50% { box-shadow: 0 0 30px var(--amber-glow); } }
+@keyframes unlockReveal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+/* WELCOME */
+#welcome { justify-content: center; align-items: center; text-align: center; gap: 2rem; }
+.welcome-title { font-family: 'Crimson Pro', serif; font-size: 2rem; font-weight: 300; line-height: 1.2; letter-spacing: -0.02em; }
+.welcome-title em { font-style: italic; color: var(--amber); }
+.welcome-subtitle { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
+.welcome-input-group { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; max-width: 300px; }
+.welcome-input-group input {
+  background: var(--bg-card); border: 1px solid var(--text-muted); border-radius: 8px;
+  padding: 0.9rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 1rem;
+  color: var(--text-primary); text-align: center; outline: none; transition: border-color 0.3s;
+}
+.welcome-input-group input:focus { border-color: var(--amber); }
+.welcome-input-group input::placeholder { color: var(--text-muted); }
+.btn-primary {
+  background: var(--amber); color: var(--bg-deep); border: none; border-radius: 8px;
+  padding: 0.9rem 2rem; font-family: 'DM Sans', sans-serif; font-size: 1rem;
+  font-weight: 600; cursor: pointer; transition: all 0.3s;
+}
+.btn-primary:hover { transform: scale(1.02); box-shadow: 0 4px 20px var(--amber-dim); }
+.btn-primary:disabled { opacity: 0.4; transform: none; cursor: not-allowed; }
+
+/* HUB */
+#hub { gap: 1.5rem; padding-top: 1.5rem; }
+.hub-header { text-align: center; padding-bottom: 1rem; border-bottom: 1px solid var(--text-muted); }
+.hub-greeting { font-family: 'Crimson Pro', serif; font-size: 1.5rem; font-weight: 300; color: var(--text-secondary); }
+.hub-greeting span { color: var(--amber); font-weight: 400; }
+.hub-title { font-family: 'Crimson Pro', serif; font-size: 1.1rem; font-weight: 300; color: var(--text-muted); margin-top: 0.3rem; }
+.progress-bar { display: flex; justify-content: center; gap: 0.5rem; padding: 1rem 0; }
+.progress-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); transition: all 0.3s; }
+.progress-dot.active { background: var(--amber); transform: scale(1.3); }
+.progress-dot.done { background: var(--teal); }
+
+/* CARDS */
+.section-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; transition: all 0.4s; border: 1px solid transparent; }
+.section-card.locked { opacity: 0.5; border-color: var(--locked); }
+.section-card.unlocked { border-color: var(--amber-dim); animation: pulseGlow 3s ease-in-out 1; }
+.section-card.completed { border-color: var(--teal-dim); opacity: 0.85; }
+.section-header { display: flex; align-items: center; gap: 1rem; padding: 1.2rem 1.25rem; }
+.section-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+.locked .section-icon { background: var(--locked); }
+.unlocked .section-icon { background: var(--amber-dim); }
+.completed .section-icon { background: var(--teal-dim); }
+.section-info { flex: 1; }
+.section-name { font-weight: 600; font-size: 1rem; margin-bottom: 0.15rem; }
+.section-desc { font-size: 0.8rem; color: var(--text-secondary); }
+.section-status { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 4px; letter-spacing: 0.05em; }
+.locked .section-status { background: var(--locked); color: var(--text-muted); }
+.unlocked .section-status { background: var(--amber-dim); color: var(--amber); }
+.completed .section-status { background: var(--teal-dim); color: var(--teal); }
+.section-content { display: none; padding: 0 1.25rem 1.5rem; animation: unlockReveal 0.5s ease-out; }
+.section-card.unlocked .section-content, .section-card.completed .section-content { display: block; }
+
+/* IMAGERY */
+.modality-group { margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-deep); border-radius: 10px; }
+.modality-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.modality-label.visual { color: var(--amber); }
+.modality-label.auditory { color: var(--violet); }
+.modality-label.kinesthetic { color: var(--rose); }
+.imagery-question { margin-bottom: 1.25rem; }
+.imagery-question:last-child { margin-bottom: 0; }
+.imagery-prompt { font-family: 'Crimson Pro', serif; font-size: 1rem; font-style: italic; color: var(--text-primary); line-height: 1.5; margin-bottom: 0.7rem; }
+.imagery-scale { display: flex; gap: 0.35rem; }
+.imagery-scale button {
+  flex: 1; aspect-ratio: 1; border: 1px solid var(--text-muted); background: var(--bg-card);
+  border-radius: 8px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem; cursor: pointer; transition: all 0.2s;
+}
+.visual .imagery-scale button.selected { border-color: var(--amber); background: var(--amber-dim); color: var(--amber); }
+.auditory .imagery-scale button.selected { border-color: var(--violet); background: var(--violet-dim); color: var(--violet); }
+.kinesthetic .imagery-scale button.selected { border-color: var(--rose); background: var(--rose-dim); color: var(--rose); }
+.imagery-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); margin-top: 0.25rem; }
+.btn-submit {
+  width: 100%; margin-top: 1rem; background: var(--amber); color: var(--bg-deep); border: none;
+  border-radius: 8px; padding: 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+  font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.btn-submit:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* RESULT */
+.imagery-result { display: none; text-align: center; padding: 1.5rem 1rem; background: var(--bg-deep); border-radius: 10px; margin-top: 1rem; }
+.imagery-result.visible { display: block; }
+.modality-scores { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1rem; }
+.modality-score { text-align: center; }
+.modality-score .score-val { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 600; }
+.modality-score .score-val.vc { color: var(--amber); }
+.modality-score .score-val.ac { color: var(--violet); }
+.modality-score .score-val.kc { color: var(--rose); }
+.modality-score .score-name { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.result-label { font-family: 'Crimson Pro', serif; font-size: 1.15rem; margin: 0.5rem 0; }
+.result-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+
+/* SPLIT */
+.split-scenario { background: var(--bg-deep); border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+.split-setup { font-family: 'Crimson Pro', serif; font-size: 1rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem; }
+.split-diagram { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin: 1.5rem 0; padding: 1rem; }
+.visual-field { flex: 1; text-align: center; padding: 1rem 0.5rem; border-radius: 10px; background: var(--bg-card); }
+.field-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+.field-object { font-size: 2rem; margin-bottom: 0.3rem; }
+.field-name { font-size: 0.85rem; color: var(--text-secondary); }
+.field-processing { font-size: 0.6rem; color: var(--text-muted); margin-top: 0.4rem; font-family: 'JetBrains Mono', monospace; }
+.corpus-callosum { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+.cc-line { width: 2px; height: 20px; background: var(--danger); }
+.cc-x { font-size: 1.2rem; color: var(--danger); }
+.split-question { font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem; font-size: 0.95rem; }
+.split-options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+.split-option {
+  background: var(--bg-card); border: 1px solid var(--text-muted); border-radius: 8px;
+  padding: 0.8rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  color: var(--text-secondary); cursor: pointer; transition: all 0.2s; text-align: left;
+}
+.split-option:hover, .split-option.selected { border-color: var(--amber); color: var(--text-primary); background: var(--amber-dim); }
+.split-option.correct { border-color: var(--teal); background: var(--teal-dim); color: var(--teal); }
+.split-option.wrong { border-color: var(--danger); opacity: 0.5; }
+.split-reveal { display: none; background: var(--bg-card); border-radius: 10px; padding: 1.25rem; margin-top: 1rem; border-left: 3px solid var(--teal); }
+.split-reveal.visible { display: block; }
+.split-reveal h3 { font-family: 'Crimson Pro', serif; font-weight: 400; font-size: 1.1rem; color: var(--teal); margin-bottom: 0.5rem; }
+.split-reveal p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* REFLECTION */
+.reflection-prompt { font-family: 'Crimson Pro', serif; font-size: 1.2rem; font-style: italic; line-height: 1.5; margin-bottom: 1rem; }
+.reflection-textarea {
+  width: 100%; min-height: 100px; background: var(--bg-deep); border: 1px solid var(--text-muted);
+  border-radius: 8px; padding: 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+  color: var(--text-primary); resize: vertical; outline: none; transition: border-color 0.3s; line-height: 1.5;
+}
+.reflection-textarea:focus { border-color: var(--amber); }
+.reflection-textarea::placeholder { color: var(--text-muted); }
+.btn-send {
+  width: 100%; margin-top: 0.75rem; background: var(--teal); color: var(--bg-deep); border: none;
+  border-radius: 8px; padding: 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+  font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.btn-send:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-send.sent { background: var(--teal-dim); color: var(--teal); cursor: default; }
+.contact-card { margin-top: 1.5rem; background: var(--bg-deep); border-radius: 10px; padding: 1.25rem; text-align: center; }
+.contact-card h3 { font-family: 'Crimson Pro', serif; font-weight: 400; font-size: 1.1rem; color: var(--amber); margin-bottom: 0.75rem; }
+.contact-item { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem; line-height: 1.5; }
+.contact-item a { color: var(--teal); text-decoration: none; }
+.contact-highlight { margin-top: 1rem; font-family: 'Crimson Pro', serif; font-size: 1rem; font-style: italic; color: var(--text-primary); line-height: 1.5; }
+
+/* UNLOCK BAR */
+.global-unlock {
+  position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-card);
+  border-top: 1px solid var(--text-muted); padding: 0.75rem 1rem;
+  display: flex; gap: 0.5rem; z-index: 100; backdrop-filter: blur(10px);
+}
+.global-unlock input {
+  flex: 1; background: var(--bg-deep); border: 1px solid var(--text-muted); border-radius: 6px;
+  padding: 0.65rem 0.9rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+  color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.1em; outline: none;
+}
+.global-unlock input:focus { border-color: var(--amber); }
+.global-unlock input::placeholder { font-family: 'DM Sans', sans-serif; text-transform: none; letter-spacing: 0; color: var(--text-muted); }
+.global-unlock button {
+  background: var(--amber); color: var(--bg-deep); border: none; border-radius: 6px;
+  padding: 0 1.5rem; font-family: 'DM Sans', sans-serif; font-weight: 600; cursor: pointer;
+}
+.global-unlock.error input { border-color: var(--danger); animation: shake 0.3s ease; }
+#hub { padding-bottom: 5rem; }
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div id="welcome" class="screen active">
+  <div><div class="welcome-title">Co to znaczy<br>mieć <em>umysł</em>?</div></div>
+  <div class="welcome-subtitle">Witaj w eksperymencie.<br>Za chwilę dowiesz się czegoś o swoim umyśle w swoim mózgu.</div>
+  <div class="welcome-input-group">
+    <input type="text" id="nickname-input" placeholder="Twój pseudonim" maxlength="20" autocomplete="off">
+    <button class="btn-primary" id="enter-btn" disabled>Wchodzę</button>
+  </div>
+</div>
+
+<!-- HUB -->
+<div id="hub" class="screen">
+  <div class="hub-header">
+    <div class="hub-greeting">Witaj, <span id="user-nickname"></span></div>
+    <div class="hub-title">Odkrywaj kolejne okna umysłu</div>
+    <div class="progress-bar">
+      <div class="progress-dot active" data-section="imagery"></div>
+      <div class="progress-dot" data-section="split"></div>
+      <div class="progress-dot" data-section="future"></div>
+    </div>
+  </div>
+
+  <!-- WYOBRAŹNIA -->
+  <div class="section-card unlocked" id="section-imagery">
+    <div class="section-header">
+      <div class="section-icon">👁</div>
+      <div class="section-info">
+        <div class="section-name">Wyobraźnia</div>
+        <div class="section-desc">Jak działa Twoje wewnętrzne kino?</div>
+      </div>
+      <div class="section-status">OTWARTE</div>
+    </div>
+    <div class="section-content">
+      <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.25rem;line-height:1.6;">
+        Oceń wyrazistość każdego wyobrażenia w skali 0-5.<br>
+        <span style="color:var(--text-muted)">0 = brak obrazu/dźwięku/odczucia &middot; 5 = tak wyraźne jak rzeczywistość</span>
+      </p>
+
+      <div class="modality-group visual">
+        <div class="modality-label visual">👁 Wzrokowa</div>
+        <div class="imagery-question" data-q="v1">
+          <div class="imagery-prompt">Zamknij oczy. Wyobraź sobie twarz kogoś bliskiego. Jak wyraźnie ją widzisz?</div>
+          <div class="imagery-scale">
+            <button onclick="sel('v1',0)">0</button><button onclick="sel('v1',1)">1</button>
+            <button onclick="sel('v1',2)">2</button><button onclick="sel('v1',3)">3</button>
+            <button onclick="sel('v1',4)">4</button><button onclick="sel('v1',5)">5</button>
+          </div>
+          <div class="imagery-labels"><span>Brak obrazu</span><span>Jak zdjęcie</span></div>
+        </div>
+        <div class="imagery-question" data-q="v2">
+          <div class="imagery-prompt">Wyobraź sobie wschodzące słońce nad morzem. Widzisz kolory na niebie?</div>
+          <div class="imagery-scale">
+            <button onclick="sel('v2',0)">0</button><button onclick="sel('v2',1)">1</button>
+            <button onclick="sel('v2',2)">2</button><button onclick="sel('v2',3)">3</button>
+            <button onclick="sel('v2',4)">4</button><button onclick="sel('v2',5)">5</button>
+          </div>
+          <div class="imagery-labels"><span>Brak obrazu</span><span>Jak zdjęcie</span></div>
+        </div>
+      </div>
+
+      <div class="modality-group auditory">
+        <div class="modality-label auditory">🎵 Słuchowa</div>
+        <div class="imagery-question" data-q="a1">
+          <div class="imagery-prompt">Przypomnij sobie swoją ulubioną piosenkę. Słyszysz melodię w głowie?</div>
+          <div class="imagery-scale">
+            <button onclick="sel('a1',0)">0</button><button onclick="sel('a1',1)">1</button>
+            <button onclick="sel('a1',2)">2</button><button onclick="sel('a1',3)">3</button>
+            <button onclick="sel('a1',4)">4</button><button onclick="sel('a1',5)">5</button>
+          </div>
+          <div class="imagery-labels"><span>Cisza</span><span>Jak na żywo</span></div>
+        </div>
+        <div class="imagery-question" data-q="a2">
+          <div class="imagery-prompt">Wyobraź sobie głos kogoś bliskiego, jak mówi Twoje imię. Słyszysz go?</div>
+          <div class="imagery-scale">
+            <button onclick="sel('a2',0)">0</button><button onclick="sel('a2',1)">1</button>
+            <button onclick="sel('a2',2)">2</button><button onclick="sel('a2',3)">3</button>
+            <button onclick="sel('a2',4)">4</button><button onclick="sel('a2',5)">5</button>
+          </div>
+          <div class="imagery-labels"><span>Cisza</span><span>Jak na żywo</span></div>
+        </div>
+      </div>
+
+      <div class="modality-group kinesthetic">
+        <div class="modality-label kinesthetic">🤲 Kinestetyczna</div>
+        <div class="imagery-question" data-q="k1">
+          <div class="imagery-prompt">Wyobraź sobie, że tańczysz albo wykonujesz znany Ci ruch. Czujesz ten ruch w ciele?</div>
+          <div class="imagery-scale">
+            <button onclick="sel('k1',0)">0</button><button onclick="sel('k1',1)">1</button>
+            <button onclick="sel('k1',2)">2</button><button onclick="sel('k1',3)">3</button>
+            <button onclick="sel('k1',4)">4</button><button onclick="sel('k1',5)">5</button>
+          </div>
+          <div class="imagery-labels"><span>Nic nie czuję</span><span>Czuję wyraźnie</span></div>
+        </div>
+        <div class="imagery-question" data-q="k2">
+          <div class="imagery-prompt">Wyobraź sobie, że rzucasz piłkę. Czujesz zamach ręki, moment wypuszczenia?</div>
+          <div class="imagery-scale">
+            <button onclick="sel('k2',0)">0</button><button onclick="sel('k2',1)">1</button>
+            <button onclick="sel('k2',2)">2</button><button onclick="sel('k2',3)">3</button>
+            <button onclick="sel('k2',4)">4</button><button onclick="sel('k2',5)">5</button>
+          </div>
+          <div class="imagery-labels"><span>Nic nie czuję</span><span>Czuję wyraźnie</span></div>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="imagery-submit" disabled onclick="submitImagery()">Sprawdź swój profil</button>
+
+      <div class="imagery-result" id="imagery-result">
+        <canvas id="radar-canvas" width="220" height="220" style="display:block;margin:0 auto 1rem;"></canvas>
+        <div class="modality-scores">
+          <div class="modality-score"><div class="score-val vc" id="vis-score">0</div><div class="score-name">Wzrok</div></div>
+          <div class="modality-score"><div class="score-val ac" id="aud-score">0</div><div class="score-name">Słuch</div></div>
+          <div class="modality-score"><div class="score-val kc" id="kin-score">0</div><div class="score-name">Ciało</div></div>
+        </div>
+        <div class="result-label" id="profile-label"></div>
+        <div class="result-desc" id="profile-desc"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPLIT BRAIN -->
+  <div class="section-card locked" id="section-split">
+    <div class="section-header">
+      <div class="section-icon">🧠</div>
+      <div class="section-info">
+        <div class="section-name">Rozdzielony mózg</div>
+        <div class="section-desc">Co jeśli dwa umysły żyją w jednej głowie?</div>
+      </div>
+      <div class="section-status">ZABLOKOWANE</div>
+    </div>
+    <div class="section-content">
+      <div class="split-scenario">
+        <div class="split-setup">
+          U pacjenta z ciężką epilepsją przecięto ciało modzelowate, główne połączenie między lewą i prawą półkulą. Teraz informacja z lewego pola widzenia trafia tylko do prawej półkuli, a z prawego pola widzenia tylko do lewej.
+        </div>
+        <div class="split-diagram">
+          <div class="visual-field">
+            <div class="field-label">Lewe pole widzenia</div>
+            <div class="field-object">🔨</div>
+            <div class="field-name">młotek</div>
+            <div class="field-processing">→ prawa półkula</div>
+          </div>
+          <div class="corpus-callosum">
+            <div class="cc-line"></div>
+            <div class="cc-x">✂️</div>
+            <div class="cc-line"></div>
+          </div>
+          <div class="visual-field">
+            <div class="field-label">Prawe pole widzenia</div>
+            <div class="field-object">✏️</div>
+            <div class="field-name">ołówek</div>
+            <div class="field-processing">→ lewa półkula</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="split-q1">
+        <div class="split-question">Pytasz pacjenta: "Co widzisz?" Co POWIE?</div>
+        <div class="split-options">
+          <button class="split-option" onclick="splitSel(1,this,'pencil')">Ołówek</button>
+          <button class="split-option" onclick="splitSel(1,this,'hammer')">Młotek</button>
+          <button class="split-option" onclick="splitSel(1,this,'both')">Oba</button>
+          <button class="split-option" onclick="splitSel(1,this,'dk')">Nie wiem</button>
+        </div>
+      </div>
+
+      <div id="split-q2" style="display:none">
+        <div class="split-question">Prosisz: "Wskaż lewą ręką to, co widzisz." Co WSKAŻE?</div>
+        <div class="split-options">
+          <button class="split-option" onclick="splitSel(2,this,'pencil')">Ołówek</button>
+          <button class="split-option" onclick="splitSel(2,this,'hammer')">Młotek</button>
+          <button class="split-option" onclick="splitSel(2,this,'both')">Oba</button>
+          <button class="split-option" onclick="splitSel(2,this,'nothing')">Nic nie wskaże</button>
+        </div>
+      </div>
+
+      <div class="split-reveal" id="split-reveal">
+        <h3>Co się właśnie stało?</h3>
+        <p>
+          Pacjent MÓWI "ołówek," bo ośrodki mowy znajdują się w lewej półkuli, a lewa półkula otrzymuje informację z prawego pola widzenia, gdzie był ołówek.
+        </p>
+        <p style="margin-top:0.75rem;">
+          Ale lewą ręką WSKAZUJE MŁOTEK, bo lewą ręką steruje prawa półkula, a prawa półkula otrzymuje informację z lewego pola widzenia, gdzie był młotek.
+        </p>
+        <p style="margin-top:0.75rem;">
+          Jeden mózg. Dwa umysły. Każdy widzi co innego. A pacjent nie zdaje sobie sprawy z tej rozbieżności.
+        </p>
+        <p style="margin-top:1rem;color:var(--amber);font-family:'Crimson Pro',serif;font-style:italic;font-size:1.05rem;">
+          Twoje poczucie bycia "jedną osobą" to konstrukcja. Twój mózg buduje tę jedność z części.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="section-card locked" id="section-future">
+    <div class="section-header">
+      <div class="section-icon">🔮</div>
+      <div class="section-info">
+        <div class="section-name">Na zakończenie</div>
+        <div class="section-desc">Co zabierasz z tego spotkania?</div>
+      </div>
+      <div class="section-status">ZABLOKOWANE</div>
+    </div>
+    <div class="section-content">
+      <div class="reflection-prompt">Co Cię dziś zainteresowało?</div>
+      <textarea class="reflection-textarea" id="reflection-text" placeholder="Napisz mi swój anonimowy feedback..." rows="4"></textarea>
+      <button class="btn-send" id="send-btn" onclick="sendReflection()">Wyślij</button>
+      <div id="send-status" style="display:none;text-align:center;margin-top:0.75rem;font-size:0.85rem;color:var(--teal);">✓ Wysłano. Dziękuję!</div>
+
+      <div class="contact-card">
+        <h3>Kognitywistyka na UwB</h3>
+        <div class="contact-item">Wydział Filozofii i Kognitywistyki</div>
+        <div class="contact-item">Uniwersytet w Białymstoku</div>
+        <div class="contact-item" style="margin-top:0.75rem;">
+          mgr Olgierd Borowiecki<br>
+          <a href="mailto:o.borowiecki@uwb.edu.pl">o.borowiecki@uwb.edu.pl</a>
+        </div>
+        <div class="contact-highlight">
+          Kognitywistyka to filozofia, neuronauka, sztuczna inteligencja, psychologia i językoznawstwo w jednym.<br><br>
+          To nie jest łatwa ścieżka. Dlatego jest warta zachodu.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNLOCK BAR -->
+<div class="global-unlock" id="global-unlock" style="display:none">
+  <input type="text" id="global-code-input" placeholder="Wpisz kod..." autocomplete="off" maxlength="20">
+  <button onclick="tryUnlock()">Odblokuj</button>
+</div>
+
+<script>
+// === CONFIG ===
+// Replace with your Google Apps Script web app URL after setup:
+const SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+// === STATE ===
+const sc = {};
+const QS = ['v1','v2','a1','a2','k1','k2'];
+const CODES = { 'SPLIT':'split', 'MEMORY':'future', 'PAMIĘĆ':'future', 'PAMIEC':'future' };
+const unlocked = new Set(['imagery']);
+const completed = new Set();
+
+// === WELCOME ===
+const ni = document.getElementById('nickname-input');
+const eb = document.getElementById('enter-btn');
+ni.addEventListener('input', () => eb.disabled = !ni.value.trim());
+ni.addEventListener('keydown', e => { if (e.key === 'Enter' && ni.value.trim()) go(); });
+eb.addEventListener('click', go);
+
+function go() {
+  document.getElementById('user-nickname').textContent = ni.value.trim();
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('hub').classList.add('active');
+  document.getElementById('global-unlock').style.display = 'flex';
+}
+
+// === IMAGERY ===
+function sel(q, v) {
+  sc[q] = v;
+  document.querySelectorAll(`.imagery-question[data-q="${q}"] .imagery-scale button`)
+    .forEach((b, i) => b.classList.toggle('selected', i === v));
+  document.getElementById('imagery-submit').disabled = !QS.every(id => id in sc);
+}
+
+function submitImagery() {
+  const vis = (sc.v1||0) + (sc.v2||0);
+  const aud = (sc.a1||0) + (sc.a2||0);
+  const kin = (sc.k1||0) + (sc.k2||0);
+
+  document.getElementById('imagery-submit').style.display = 'none';
+  const r = document.getElementById('imagery-result');
+  r.classList.add('visible');
+
+  document.getElementById('vis-score').textContent = vis;
+  document.getElementById('aud-score').textContent = aud;
+  document.getElementById('kin-score').textContent = kin;
+
+  drawRadar(vis, aud, kin);
+
+  const total = vis + aud + kin;
+  const pairs = [['wzrokowa', vis], ['słuchowa', aud], ['kinestetyczna', kin]];
+  pairs.sort((a,b) => b[1] - a[1]);
+  const dominant = pairs[0][0];
+
+  let label, desc;
+  if (total <= 8) {
+    label = 'Niska intensywność wyobraźni';
+    desc = 'Twój umysł prawdopodobnie nie generuje intensywnych wewnętrznych doświadczeń zmysłowych. To nie wada! Prowadzący tę prezentację ma afantazję. Twój mózg przetwarza informacje inaczej, nie gorzej.';
+  } else if (total <= 20) {
+    label = 'Wyobraźnia ' + dominant;
+    desc = 'Twoja najsilniejsza modalność to wyobraźnia ' + dominant + '. Większość ludzi ma nierównomierny profil, z jednym dominującym kanałem. Twój mózg ma swoje preferencje!';
+  } else {
+    label = 'Hiperfantazja';
+    desc = 'Twoje wewnętrzne doświadczenia zmysłowe są niezwykle żywe! Najsilniejszy kanał: wyobraźnia ' + dominant + '. Twój mózg generuje bogatą rzeczywistość wewnętrzną.';
+  }
+
+  document.getElementById('profile-label').textContent = label;
+  document.getElementById('profile-desc').textContent = desc;
+  complete('imagery');
+}
+
+function drawRadar(vis, aud, kin) {
+  const c = document.getElementById('radar-canvas');
+  const ctx = c.getContext('2d');
+  c.width = 440; c.height = 440;
+  c.style.width = '220px'; c.style.height = '220px';
+  ctx.scale(2, 2);
+
+  const cx = 110, cy = 110, maxR = 80;
+  const angles = [-Math.PI/2, -Math.PI/2 + 2*Math.PI/3, -Math.PI/2 + 4*Math.PI/3];
+  const colors = ['#f4a261','#a78bfa','#fb7185'];
+  const labels = ['Wzrok','Słuch','Ciało'];
+  const vals = [vis/10, aud/10, kin/10];
+
+  for (let i = 1; i <= 5; i++) {
+    const r = (i/5) * maxR;
+    ctx.beginPath();
+    angles.forEach((a,j) => {
+      const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r;
+      j === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.stroke();
+  }
+
+  angles.forEach((a,i) => {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a)*(maxR+5), cy + Math.sin(a)*(maxR+5));
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.stroke();
+
+    const lx = cx + Math.cos(a)*(maxR+22), ly = cy + Math.sin(a)*(maxR+22);
+    ctx.fillStyle = colors[i];
+    ctx.font = '500 11px "DM Sans"';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(labels[i], lx, ly);
+  });
+
+  ctx.beginPath();
+  angles.forEach((a,i) => {
+    const r = vals[i]*maxR;
+    const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r;
+    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(244,162,97,0.15)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(244,162,97,0.6)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  angles.forEach((a,i) => {
+    const r = vals[i]*maxR;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a)*r, cy + Math.sin(a)*r, 5, 0, Math.PI*2);
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+  });
+}
+
+// === SPLIT BRAIN ===
+function splitSel(q, btn, ans) {
+  const cont = document.getElementById(`split-q${q}`);
+  cont.querySelectorAll('.split-option').forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  if (q === 1) setTimeout(() => {
+    document.getElementById('split-q2').style.display = 'block';
+    document.getElementById('split-q2').scrollIntoView({ behavior:'smooth' });
+  }, 400);
+
+  if (q === 2) setTimeout(revealSplit, 500);
+}
+
+function revealSplit() {
+  document.querySelectorAll('#split-q1 .split-option').forEach(o => {
+    o.style.pointerEvents = 'none';
+    if (o.textContent === 'Ołówek') o.classList.add('correct');
+    else if (o.classList.contains('selected')) o.classList.add('wrong');
+  });
+  document.querySelectorAll('#split-q2 .split-option').forEach(o => {
+    o.style.pointerEvents = 'none';
+    if (o.textContent === 'Młotek') o.classList.add('correct');
+    else if (o.classList.contains('selected')) o.classList.add('wrong');
+  });
+  document.getElementById('split-reveal').classList.add('visible');
+  document.getElementById('split-reveal').scrollIntoView({ behavior:'smooth' });
+  complete('split');
+}
+
+// === UNLOCK ===
+const gi = document.getElementById('global-code-input');
+const gb = document.getElementById('global-unlock');
+gi.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+
+function tryUnlock() {
+  const code = gi.value.trim().toUpperCase();
+  const sid = CODES[code];
+  if (sid && !unlocked.has(sid)) {
+    unlock(sid);
+    gi.value = '';
+    gb.classList.remove('error');
+  } else {
+    gb.classList.add('error');
+    setTimeout(() => gb.classList.remove('error'), 600);
+  }
+}
+
+function unlock(sid) {
+  unlocked.add(sid);
+  const card = document.getElementById(`section-${sid}`);
+  card.classList.remove('locked');
+  card.classList.add('unlocked');
+  card.querySelector('.section-status').textContent = 'OTWARTE';
+  const dot = document.querySelector(`.progress-dot[data-section="${sid}"]`);
+  if (dot) dot.classList.add('active');
+  setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'start' }), 300);
+  if (unlocked.size >= 3) {
+    gb.style.display = 'none';
+    document.getElementById('hub').style.paddingBottom = '2rem';
+  }
+}
+
+function complete(sid) {
+  completed.add(sid);
+  const card = document.getElementById(`section-${sid}`);
+  card.classList.remove('unlocked');
+  card.classList.add('completed');
+  card.querySelector('.section-status').textContent = 'UKOŃCZONE';
+  const dot = document.querySelector(`.progress-dot[data-section="${sid}"]`);
+  if (dot) { dot.classList.remove('active'); dot.classList.add('done'); }
+}
+
+// === REFLECTION SEND ===
+function sendReflection() {
+  const text = document.getElementById('reflection-text').value.trim();
+  if (!text) return;
+
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  btn.textContent = 'Wysyłanie...';
+
+  // Optimistic UI
+  setTimeout(() => {
+    btn.classList.add('sent');
+    btn.textContent = '✓ Wysłano';
+    document.getElementById('send-status').style.display = 'block';
+    document.getElementById('reflection-text').disabled = true;
+  }, 300);
+
+  // Background send
+  const payload = {
+    timestamp: new Date().toISOString(),
+    reflection: text,
+    visual: (sc.v1||0) + (sc.v2||0),
+    auditory: (sc.a1||0) + (sc.a2||0),
+    kinesthetic: (sc.k1||0) + (sc.k2||0)
+  };
+
+  if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }
+
+  complete('future');
+}
+</script>
+</body>
+</html>
