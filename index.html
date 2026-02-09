@@ -20,10 +20,6 @@
   --text-muted: #5a5850;
   --locked: #2a2a3a;
   --danger: #e74c3c;
-  --violet: #a78bfa;
-  --violet-dim: #a78bfa22;
-  --rose: #fb7185;
-  --rose-dim: #fb718522;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 16px; -webkit-text-size-adjust: 100%; }
@@ -71,7 +67,7 @@ body::before {
 .btn-primary:disabled { opacity: 0.4; transform: none; cursor: not-allowed; }
 
 /* HUB */
-#hub { gap: 1.5rem; padding-top: 1.5rem; }
+#hub { gap: 1.5rem; padding-top: 1.5rem; padding-bottom: 5rem; }
 .hub-header { text-align: center; padding-bottom: 1rem; border-bottom: 1px solid var(--text-muted); }
 .hub-greeting { font-family: 'Crimson Pro', serif; font-size: 1.5rem; font-weight: 300; color: var(--text-secondary); }
 .hub-greeting span { color: var(--amber); font-weight: 400; }
@@ -103,10 +99,7 @@ body::before {
 
 /* IMAGERY */
 .modality-group { margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-deep); border-radius: 10px; }
-.modality-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-.modality-label.visual { color: var(--amber); }
-.modality-label.auditory { color: var(--violet); }
-.modality-label.kinesthetic { color: var(--rose); }
+.modality-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--amber); }
 .imagery-question { margin-bottom: 1.25rem; }
 .imagery-question:last-child { margin-bottom: 0; }
 .imagery-prompt { font-family: 'Crimson Pro', serif; font-size: 1rem; font-style: italic; color: var(--text-primary); line-height: 1.5; margin-bottom: 0.7rem; }
@@ -116,9 +109,7 @@ body::before {
   border-radius: 8px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace;
   font-size: 0.95rem; cursor: pointer; transition: all 0.2s;
 }
-.visual .imagery-scale button.selected { border-color: var(--amber); background: var(--amber-dim); color: var(--amber); }
-.auditory .imagery-scale button.selected { border-color: var(--violet); background: var(--violet-dim); color: var(--violet); }
-.kinesthetic .imagery-scale button.selected { border-color: var(--rose); background: var(--rose-dim); color: var(--rose); }
+.imagery-scale button.selected { border-color: var(--amber); background: var(--amber-dim); color: var(--amber); }
 .imagery-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); margin-top: 0.25rem; }
 .btn-submit {
   width: 100%; margin-top: 1rem; background: var(--amber); color: var(--bg-deep); border: none;
@@ -130,13 +121,6 @@ body::before {
 /* RESULT */
 .imagery-result { display: none; text-align: center; padding: 1.5rem 1rem; background: var(--bg-deep); border-radius: 10px; margin-top: 1rem; }
 .imagery-result.visible { display: block; }
-.modality-scores { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1rem; }
-.modality-score { text-align: center; }
-.modality-score .score-val { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 600; }
-.modality-score .score-val.vc { color: var(--amber); }
-.modality-score .score-val.ac { color: var(--violet); }
-.modality-score .score-val.kc { color: var(--rose); }
-.modality-score .score-name { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 .result-label { font-family: 'Crimson Pro', serif; font-size: 1.15rem; margin: 0.5rem 0; }
 .result-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
 
@@ -207,7 +191,6 @@ body::before {
   padding: 0 1.5rem; font-family: 'DM Sans', sans-serif; font-weight: 600; cursor: pointer;
 }
 .global-unlock.error input { border-color: var(--danger); animation: shake 0.3s ease; }
-#hub { padding-bottom: 5rem; }
 </style>
 </head>
 <body>
@@ -251,9 +234,9 @@ body::before {
       </p>
 
       <div class="modality-group visual">
-        <div class="modality-label visual">👁 Wyobraźnia wzrokowa</div>
+        <div class="modality-label">👁 Wyobraźnia wzrokowa</div>
         <div class="imagery-question" data-q="v1">
-          <div class="imagery-prompt">Zamknij oczy. Wyobraź sobie twarz kogoś bliskiego. Jak wyraźnie ją widzisz?</div>
+          <div class="imagery-prompt">Zamknij oczy. Wyobraź sobie twarz kogoś bliskiego. Jak wyraźnie widzisz twarz? Czy dostrzegasz detale? Czy twarz zmienia wyraz? Ile szczegółów widzisz?</div>
           <div class="imagery-scale">
             <button onclick="sel('v1',0)">0</button><button onclick="sel('v1',1)">1</button>
             <button onclick="sel('v1',2)">2</button><button onclick="sel('v1',3)">3</button>
@@ -262,22 +245,22 @@ body::before {
           <div class="imagery-labels"><span>Brak obrazu</span><span>Jak zdjęcie</span></div>
         </div>
         <div class="imagery-question" data-q="v2">
-          <div class="imagery-prompt">Wyobraź sobie wschodzące słońce nad morzem. Widzisz kolory na niebie?</div>
+          <div class="imagery-prompt">Wyobraź sobie Rynek Kościuszki. Ile szczegółów widzisz? Fontannę? Cały plac? Czy możez się obrócić i przejść po rynku?</div>
           <div class="imagery-scale">
             <button onclick="sel('v2',0)">0</button><button onclick="sel('v2',1)">1</button>
             <button onclick="sel('v2',2)">2</button><button onclick="sel('v2',3)">3</button>
             <button onclick="sel('v2',4)">4</button><button onclick="sel('v2',5)">5</button>
           </div>
-          <div class="imagery-labels"><span>Brak obrazu</span><span>Jak zdjęcie</span></div>
+          <div class="imagery-labels"><span>Nic nie widzę</span><span>Jestem tam i mogę chodzić wszędzie!</span></div>
         </div>
         <div class="imagery-question" data-q="v3">
-          <div class="imagery-prompt">TUTAJ WPISZ TRZECIE PYTANIE</div>
+          <div class="imagery-prompt">Czy zdarza Ci się śnić sny tak wyraźne, że po kilku dniach musisz się zastanowić czy to był sen czy to wydarzyło się naprawdę?</div>
           <div class="imagery-scale">
             <button onclick="sel('v3',0)">0</button><button onclick="sel('v3',1)">1</button>
             <button onclick="sel('v3',2)">2</button><button onclick="sel('v3',3)">3</button>
             <button onclick="sel('v3',4)">4</button><button onclick="sel('v3',5)">5</button>
           </div>
-          <div class="imagery-labels"><span>Brak obrazu</span><span>Jak zdjęcie</span></div>
+          <div class="imagery-labels"><span>Moje sny są bez obrazu</span><span>Śnię fotorealistyczne sny</span></div>
         </div>
       </div>
 
@@ -413,7 +396,6 @@ body::before {
 
 <script>
 // === CONFIG ===
-// Replace with your Google Apps Script web app URL after setup:
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwPAPZfAemRm-sRR_FbtW3ZAPljondsI1qHwTEGeLq-8s2HmmfkApjnM11TvAiSX1KN8g/exec';
 
 // === STATE ===
@@ -470,103 +452,6 @@ function submitImagery() {
   document.getElementById('profile-label').textContent = label;
   document.getElementById('profile-desc').textContent = desc;
   complete('imagery');
-}
-
-  const vis = (sc.v1||0) + (sc.v2||0);
-  const aud = (sc.a1||0) + (sc.a2||0);
-  const kin = (sc.k1||0) + (sc.k2||0);
-
-  document.getElementById('imagery-submit').style.display = 'none';
-  const r = document.getElementById('imagery-result');
-  r.classList.add('visible');
-
-  document.getElementById('vis-score').textContent = vis;
-  document.getElementById('aud-score').textContent = aud;
-  document.getElementById('kin-score').textContent = kin;
-
-  drawRadar(vis, aud, kin);
-
-  const total = vis + aud + kin;
-  const pairs = [['wzrokowa', vis], ['słuchowa', aud], ['kinestetyczna', kin]];
-  pairs.sort((a,b) => b[1] - a[1]);
-  const dominant = pairs[0][0];
-
-  let label, desc;
-  if (total <= 8) {
-    label = 'Niska intensywność wyobraźni';
-    desc = 'Twój umysł prawdopodobnie nie generuje intensywnych wewnętrznych doświadczeń zmysłowych. To nie wada! Prowadzący tę prezentację ma afantazję. Twój mózg przetwarza informacje inaczej, nie gorzej.';
-  } else if (total <= 20) {
-    label = 'Wyobraźnia ' + dominant;
-    desc = 'Twoja najsilniejsza modalność to wyobraźnia ' + dominant + '. Większość ludzi ma nierównomierny profil, z jednym dominującym kanałem. Twój mózg ma swoje preferencje!';
-  } else {
-    label = 'Hiperfantazja';
-    desc = 'Twoje wewnętrzne doświadczenia zmysłowe są niezwykle żywe! Najsilniejszy kanał: wyobraźnia ' + dominant + '. Twój mózg generuje bogatą rzeczywistość wewnętrzną.';
-  }
-
-  document.getElementById('profile-label').textContent = label;
-  document.getElementById('profile-desc').textContent = desc;
-  complete('imagery');
-
-function drawRadar(vis, aud, kin) {
-  const c = document.getElementById('radar-canvas');
-  const ctx = c.getContext('2d');
-  c.width = 440; c.height = 440;
-  c.style.width = '220px'; c.style.height = '220px';
-  ctx.scale(2, 2);
-
-  const cx = 110, cy = 110, maxR = 80;
-  const angles = [-Math.PI/2, -Math.PI/2 + 2*Math.PI/3, -Math.PI/2 + 4*Math.PI/3];
-  const colors = ['#f4a261','#a78bfa','#fb7185'];
-  const labels = ['Wzrok','Słuch','Ciało'];
-  const vals = [vis/10, aud/10, kin/10];
-
-  for (let i = 1; i <= 5; i++) {
-    const r = (i/5) * maxR;
-    ctx.beginPath();
-    angles.forEach((a,j) => {
-      const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r;
-      j === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-    });
-    ctx.closePath();
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-    ctx.stroke();
-  }
-
-  angles.forEach((a,i) => {
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + Math.cos(a)*(maxR+5), cy + Math.sin(a)*(maxR+5));
-    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-    ctx.stroke();
-
-    const lx = cx + Math.cos(a)*(maxR+22), ly = cy + Math.sin(a)*(maxR+22);
-    ctx.fillStyle = colors[i];
-    ctx.font = '500 11px "DM Sans"';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(labels[i], lx, ly);
-  });
-
-  ctx.beginPath();
-  angles.forEach((a,i) => {
-    const r = vals[i]*maxR;
-    const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r;
-    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-  });
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(244,162,97,0.15)';
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(244,162,97,0.6)';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  angles.forEach((a,i) => {
-    const r = vals[i]*maxR;
-    ctx.beginPath();
-    ctx.arc(cx + Math.cos(a)*r, cy + Math.sin(a)*r, 5, 0, Math.PI*2);
-    ctx.fillStyle = colors[i];
-    ctx.fill();
-  });
 }
 
 // === SPLIT BRAIN ===
@@ -651,7 +536,6 @@ function sendReflection() {
   btn.disabled = true;
   btn.textContent = 'Wysyłanie...';
 
-  // Optimistic UI
   setTimeout(() => {
     btn.classList.add('sent');
     btn.textContent = '✓ Wysłano';
@@ -659,14 +543,13 @@ function sendReflection() {
     document.getElementById('reflection-text').disabled = true;
   }, 300);
 
-  // Background send
   const payload = {
     timestamp: new Date().toISOString(),
     reflection: text,
     visual: (sc.v1||0) + (sc.v2||0) + (sc.v3||0)
   };
 
-  if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+  if (SHEET_URL && SHEET_URL.length > 0) {
     fetch(SHEET_URL, {
       method: 'POST',
       mode: 'no-cors',
