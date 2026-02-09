@@ -366,8 +366,8 @@ body::before {
       <div class="section-status">ZABLOKOWANE</div>
     </div>
     <div class="section-content">
-      <div class="reflection-prompt">Co Cię dziś zainteresowało?</div>
-      <textarea class="reflection-textarea" id="reflection-text" placeholder="Napisz mi swój anonimowy feedback..." rows="4"></textarea>
+      <div class="reflection-prompt">Co nowego wiesz o swoim umyśle?</div>
+      <textarea class="reflection-textarea" id="reflection-text" placeholder="Napisz mi co Cię zainteresowało (odpowiedzi są anonimowe)" rows="4"></textarea>
       <button class="btn-send" id="send-btn" onclick="sendReflection()">Wyślij</button>
       <div id="send-status" style="display:none;text-align:center;margin-top:0.75rem;font-size:0.85rem;color:var(--teal);">✓ Wysłano. Dziękuję!</div>
 
@@ -442,7 +442,7 @@ function submitImagery() {
     label = 'Afantazja / Niska wyobraźnia';
     desc = 'Twój umysł prawdopodobnie nie generuje wyraźnych obrazów mentalnych. Podobnie jak prowadzący tę prezentację! To nie wada. Twój mózg przetwarza informacje inaczej, nie gorzej.';
   } else if (total <= 10) {
-    label = 'Przeciętna wyobraźnia';
+    label = 'Standardowa wyobraźnia';
     desc = 'Widzisz obrazy, ale nie zawsze są krystalicznie wyraźne. Większość ludzi jest tutaj. Twój mózg balansuje między obrazami a innymi formami myślenia.';
   } else {
     label = 'Hiperfantazja';
