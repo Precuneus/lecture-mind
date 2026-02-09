@@ -247,13 +247,13 @@ body::before {
     <div class="section-content">
       <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.25rem;line-height:1.6;">
         Oceń wyrazistość każdego wyobrażenia w skali 0-5.<br>
-        <span style="color:var(--text-muted)">0 = brak obrazu/dźwięku/odczucia &middot; 5 = tak wyraźne jak rzeczywistość</span>
+        <span style="color:var(--text-muted)">0 = brak obrazu &middot; 5 = tak wyraźne jak rzeczywistość</span>
       </p>
 
       <div class="modality-group visual">
-        <div class="modality-label visual">👁 Wzrokowa</div>
+        <div class="modality-label visual">👁 Wyobraźnia wzrokowa</div>
         <div class="imagery-question" data-q="v1">
-          <div class="imagery-prompt">Zamknij oczy. Wyobraź sobie twarz kogoś bliskiego. Jak wyraźnie widzisz twarz? Czy dostrzegasz detale? Czy twarz zmienia wyraz? Ile szczegółów widzisz?</div>
+          <div class="imagery-prompt">Zamknij oczy. Wyobraź sobie twarz kogoś bliskiego. Jak wyraźnie ją widzisz?</div>
           <div class="imagery-scale">
             <button onclick="sel('v1',0)">0</button><button onclick="sel('v1',1)">1</button>
             <button onclick="sel('v1',2)">2</button><button onclick="sel('v1',3)">3</button>
@@ -262,71 +262,38 @@ body::before {
           <div class="imagery-labels"><span>Brak obrazu</span><span>Jak zdjęcie</span></div>
         </div>
         <div class="imagery-question" data-q="v2">
-          <div class="imagery-prompt">Czy zdarza Ci się śnić sny tak wyraźne, że po kilku dniach musisz się zastanowić czy to był sen czy to wydarzyło się naprawdę?  </div>
+          <div class="imagery-prompt">Wyobraź sobie wschodzące słońce nad morzem. Widzisz kolory na niebie?</div>
           <div class="imagery-scale">
             <button onclick="sel('v2',0)">0</button><button onclick="sel('v2',1)">1</button>
             <button onclick="sel('v2',2)">2</button><button onclick="sel('v2',3)">3</button>
             <button onclick="sel('v2',4)">4</button><button onclick="sel('v2',5)">5</button>
           </div>
-          <div class="imagery-labels"><span>Moje sny są bez obrazu</span><span>Śnię fotorealistyczne sny</span></div>
+          <div class="imagery-labels"><span>Brak obrazu</span><span>Jak zdjęcie</span></div>
+        </div>
+        <div class="imagery-question" data-q="v3">
+          <div class="imagery-prompt">TUTAJ WPISZ TRZECIE PYTANIE</div>
+          <div class="imagery-scale">
+            <button onclick="sel('v3',0)">0</button><button onclick="sel('v3',1)">1</button>
+            <button onclick="sel('v3',2)">2</button><button onclick="sel('v3',3)">3</button>
+            <button onclick="sel('v3',4)">4</button><button onclick="sel('v3',5)">5</button>
+          </div>
+          <div class="imagery-labels"><span>Brak obrazu</span><span>Jak zdjęcie</span></div>
         </div>
       </div>
 
-      <div class="modality-group auditory">
-        <div class="modality-label auditory">🎵 Słuchowa</div>
-        <div class="imagery-question" data-q="a1">
-          <div class="imagery-prompt">Przypomnij sobie swoją ulubioną piosenkę. Słyszysz melodię w głowie? Jak dobrze możesz usłyszeć słowa, instrumenty, głos?</div>
-          <div class="imagery-scale">
-            <button onclick="sel('a1',0)">0</button><button onclick="sel('a1',1)">1</button>
-            <button onclick="sel('a1',2)">2</button><button onclick="sel('a1',3)">3</button>
-            <button onclick="sel('a1',4)">4</button><button onclick="sel('a1',5)">5</button>
-          </div>
-          <div class="imagery-labels"><span>Cisza</span><span>Słyszę wszystko jak na żywo</span></div>
-        </div>
-        <div class="imagery-question" data-q="a2">
-          <div class="imagery-prompt">Czy zawsze słyszysz swój głos kiedy myślisz? </div>
-          <div class="imagery-scale">
-            <button onclick="sel('a2',0)">0</button><button onclick="sel('a2',1)">1</button>
-            <button onclick="sel('a2',2)">2</button><button onclick="sel('a2',3)">3</button>
-            <button onclick="sel('a2',4)">4</button><button onclick="sel('a2',5)">5</button>
-          </div>
-          <div class="imagery-labels"><span>Nigdy/tylko jak się skupię</span><span>Zawsze</span></div>
-        </div>
-      </div>
-
-      <div class="modality-group kinesthetic">
-        <div class="modality-label kinesthetic">Kinestetyczna</div>
-        <div class="imagery-question" data-q="k1">
-          <div class="imagery-prompt">Na ile zgadzasz się ze stwierdzeniem, że kiedy myślisz to posługujesz się ruchem?</div>
-          <div class="imagery-scale">
-            <button onclick="sel('k1',0)">0</button><button onclick="sel('k1',1)">1</button>
-            <button onclick="sel('k1',2)">2</button><button onclick="sel('k1',3)">3</button>
-            <button onclick="sel('k1',4)">4</button><button onclick="sel('k1',5)">5</button>
-          </div>
-          <div class="imagery-labels"><span>Myślę inaczej</span><span>Czuję ruch</span></div>
-        </div>
-        <div class="imagery-question" data-q="k2">
-          <div class="imagery-prompt">Wyobraź sobie, że się poruszasz się w dobrze znany sposób (biegniesz/łyżwy/deska/rower/samochód). Czujesz ten ruch w wyobraźni?</div>
-          <div class="imagery-scale">
-            <button onclick="sel('k2',0)">0</button><button onclick="sel('k2',1)">1</button>
-            <button onclick="sel('k2',2)">2</button><button onclick="sel('k2',3)">3</button>
-            <button onclick="sel('k2',4)">4</button><button onclick="sel('k2',5)">5</button>
-          </div>
-          <div class="imagery-labels"><span>Nic nie czuję</span><span>Czuję wyraźnie</span></div>
-        </div>
-      </div>
-
-      <button class="btn-submit" id="imagery-submit" disabled onclick="submitImagery()">Sprawdź swój profil</button>
+      <button class="btn-submit" id="imagery-submit" disabled onclick="submitImagery()">Sprawdź swój wynik</button>
 
       <div class="imagery-result" id="imagery-result">
-        <canvas id="radar-canvas" width="220" height="220" style="display:block;margin:0 auto 1rem;"></canvas>
-        <div class="modality-scores">
-          <div class="modality-score"><div class="score-val vc" id="vis-score">0</div><div class="score-name">Wzrok</div></div>
-          <div class="modality-score"><div class="score-val ac" id="aud-score">0</div><div class="score-name">Słuch</div></div>
-          <div class="modality-score"><div class="score-val kc" id="kin-score">0</div><div class="score-name">Ciało</div></div>
-        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:2.5rem;font-weight:600;color:var(--amber);" id="score-value">0</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:var(--text-muted);">/ 15</div>
         <div class="result-label" id="profile-label"></div>
         <div class="result-desc" id="profile-desc"></div>
+        <div style="margin-top:1.2rem;height:6px;background:linear-gradient(90deg,var(--teal),var(--amber));border-radius:3px;position:relative;">
+          <div id="score-marker" style="position:absolute;top:-6px;width:18px;height:18px;background:var(--text-primary);border-radius:50%;transform:translateX(-50%);box-shadow:0 0 10px rgba(255,255,255,0.3);transition:left 0.8s ease-out;left:50%;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);margin-top:0.5rem;">
+          <span>Afantazja</span><span>Hiperfantazja</span>
+        </div>
       </div>
     </div>
   </div>
@@ -451,7 +418,7 @@ const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwPAPZfAemRm-sRR_FbtW
 
 // === STATE ===
 const sc = {};
-const QS = ['v1','v2','a1','a2','k1','k2'];
+const QS = ['v1','v2','v3'];
 const CODES = { 'SPLIT':'split', 'MEMORY':'future', 'PAMIĘĆ':'future', 'PAMIEC':'future' };
 const unlocked = new Set(['imagery']);
 const completed = new Set();
@@ -479,6 +446,32 @@ function sel(q, v) {
 }
 
 function submitImagery() {
+  const total = (sc.v1||0) + (sc.v2||0) + (sc.v3||0);
+
+  document.getElementById('imagery-submit').style.display = 'none';
+  const r = document.getElementById('imagery-result');
+  r.classList.add('visible');
+
+  document.getElementById('score-value').textContent = total;
+  document.getElementById('score-marker').style.left = (total/15*100) + '%';
+
+  let label, desc;
+  if (total <= 4) {
+    label = 'Afantazja / Niska wyobraźnia';
+    desc = 'Twój umysł prawdopodobnie nie generuje wyraźnych obrazów mentalnych. Podobnie jak prowadzący tę prezentację! To nie wada. Twój mózg przetwarza informacje inaczej, nie gorzej.';
+  } else if (total <= 10) {
+    label = 'Przeciętna wyobraźnia';
+    desc = 'Widzisz obrazy, ale nie zawsze są krystalicznie wyraźne. Większość ludzi jest tutaj. Twój mózg balansuje między obrazami a innymi formami myślenia.';
+  } else {
+    label = 'Hiperfantazja';
+    desc = 'Twoje obrazy mentalne są niezwykle żywe! Możesz niemal "widzieć" rzeczy, których nie ma przed Twoimi oczami. Twój mózg jest generatorem wewnętrznego kina.';
+  }
+
+  document.getElementById('profile-label').textContent = label;
+  document.getElementById('profile-desc').textContent = desc;
+  complete('imagery');
+}
+
   const vis = (sc.v1||0) + (sc.v2||0);
   const aud = (sc.a1||0) + (sc.a2||0);
   const kin = (sc.k1||0) + (sc.k2||0);
@@ -513,7 +506,6 @@ function submitImagery() {
   document.getElementById('profile-label').textContent = label;
   document.getElementById('profile-desc').textContent = desc;
   complete('imagery');
-}
 
 function drawRadar(vis, aud, kin) {
   const c = document.getElementById('radar-canvas');
@@ -671,9 +663,7 @@ function sendReflection() {
   const payload = {
     timestamp: new Date().toISOString(),
     reflection: text,
-    visual: (sc.v1||0) + (sc.v2||0),
-    auditory: (sc.a1||0) + (sc.a2||0),
-    kinesthetic: (sc.k1||0) + (sc.k2||0)
+    visual: (sc.v1||0) + (sc.v2||0) + (sc.v3||0)
   };
 
   if (SHEET_URL && SHEET_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
